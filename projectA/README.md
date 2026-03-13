@@ -1,40 +1,33 @@
-# 🗳️ Greek Election System Simulation - Phase 01
+# Greek Election System Simulation - Phase 01
 
-Αυτό το project υλοποιεί μια προσομοίωση του ελληνικού εκλογικού συστήματος κατανομής βουλευτικών εδρών. Αναπτύχθηκε στα πλαίσια του μαθήματος **ΗΥ240: Δομές Δεδομένων** (Χειμερινό Εξάμηνο 2024-25). Αποτελεί το 1ο μέρος της προγραμματιστικής εργασίας.
-
----
-
-## 🏗️ Δομές Δεδομένων
-
-* **Εκλογικές Περιφέρειες (Districts):** Στατικός πίνακας 56 θέσεων. Κάθε εγγραφή περιέχει πληροφορίες για τις έδρες, τα λευκά/άκυρα, και δείκτες σε λίστες τμημάτων και υποψηφίων.
-* **Εκλογικά Τμήματα (Stations):** Μη ταξινομημένη, απλά συνδεδεμένη λίστα μέσα σε κάθε εκλογική περιφέρεια.
-* **Ψηφοφόροι (Voters):** Μη ταξινομημένη, απλά συνδεδεμένη λίστα με κόμβο φρουρό (sentinel node) για κάθε εκλογικό τμήμα.
-* **Κόμματα (Parties):** Στατικός πίνακας 5 θέσεων. Το κάθε κόμμα διατηρεί μια ταξινομημένη, απλά συνδεδεμένη λίστα με τα εκλεγμένα του μέλη (σε φθίνουσα διάταξη ως προς τις ψήφους).
-* **Υποψήφιοι (Candidates):** Διπλά συνδεδεμένη λίστα για κάθε περιφέρεια, ταξινομημένη σε φθίνουσα διάταξη ως προς τον αριθμό των ψήφων.
-* **Κοινοβούλιο (Parliament):** Μια ταξινομημένη απλά συνδεδεμένη λίστα βουλευτών, σε φθίνουσα διάταξη ως προς τον αριθμό των ψήφων τους.
+This project implements a simulation of the Greek electoral system for the allocation of parliamentary seats. It was developed as part of the **HY240: Data Structures** course (Winter Semester 2024-25). It constitutes the 1st part of the programming assignment.
 
 ---
 
-## ⚙️ Λειτουργίες Προγράμματος (Events)
+## Data Structures
 
-| Εντολή | Περιγραφή |
+* **Electoral Districts (Districts):** Static array of 56 positions. Each record contains information about the seats, blank/invalid votes, and pointers to the lists of stations and candidates.
+* **Polling Stations (Stations):** Unsorted, singly-linked list within each electoral district.
+* **Voters:** Unsorted, singly-linked list with a sentinel node for each polling station.
+* **Parties:** Static array of 5 positions. Each party maintains a sorted, singly-linked list of its elected members (in descending order based on votes).
+* **Candidates:** Doubly-linked list for each district, sorted in descending order based on the number of votes.
+* **Parliament:** A sorted, singly-linked list of Members of Parliament (MPs), in descending order based on their vote count.
+
+---
+
+## ⚙️ Program Operations (Events)
+
+| Command | Description |
 | :--- | :--- |
-| `A` | Αναγγελία εκλογών. Αρχικοποιούνται οι δομές (Districts, Parties, Parliament). |
-| `D <did> <seats>` | Δημιουργία εκλογικής περιφέρειας. |
-| `S <sid> <did>` | Δημιουργία εκλογικού τμήματος στη λίστα της αντίστοιχης περιφέρειας. |
-| `P <pid>` | Ίδρυση νέου κόμματος και εισαγωγή στον πίνακα κομμάτων. |
-| `C <cid> <did> <pid>`| Εγγραφή υποψηφίου στη διπλά συνδεδεμένη λίστα υποψηφίων της περιφέρειας. |
-| `R <vid> <did> <sid>`| Εγγραφή ψηφοφόρου στη λίστα του εκλογικού τμήματος. |
-| `U <vid>` | Διαγραφή ψηφοφόρου με αναζήτηση σε όλη την επικράτεια. |
-| `E` | Κατάργηση κενών εκλογικών τμημάτων σε χρόνο O(n). |
-| `V <vid> <sid> <cid>`| Διαδικασία ψήφου και ανταλλαγή θέσεων (swaps) για διατήρηση ταξινόμησης λίστας υποψηφίων. |
-| `M <did>` | Καταμέτρηση ψήφων περιφέρειας και υπολογισμός εκλογικού μέτρου. |
-| `G` | Απόδοση αδιάθετων εδρών περιφερειών. |
-| `N` | Σχηματισμός κοινοβουλίου (συνένωση των λιστών εκλεγμένων στην τελική λίστα) σε χρόνο O(n). |
-
----
-
-## 🚀 Οδηγίες Εκτέλεσης
-
-```bash
-<executable> <input-file>
+| `A` | Announce elections. Initializes the main structures (Districts, Parties, Parliament). |
+| `D <did> <seats>` | Create an electoral district. |
+| `S <sid> <did>` | Create a polling station within the respective district's list. |
+| `P <pid>` | Establish a new party and insert it into the parties array. |
+| `C <cid> <did> <pid>`| Register a candidate in the district's doubly-linked candidates list. |
+| `R <vid> <did> <sid>`| Register a voter in the polling station's list. |
+| `U <vid>` | Unregister a voter by searching across the entire territory. |
+| `E` | Eliminate empty polling stations in O(n) time. |
+| `V <vid> <sid> <cid>`| Voting process; uses position swaps to maintain the sorted candidate list. |
+| `M <did>` | Count votes for a district and calculate the electoral quota. |
+| `G` | Allocate undistributed district seats. |
+| `N` | Form parliament (merge the lists of elected candidates into the final list) in O(n) time. |

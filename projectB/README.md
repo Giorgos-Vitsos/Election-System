@@ -1,47 +1,37 @@
-#  Election System Simulation - Phase 02
+# Election System Simulation - Phase 02
 
-Αυτό το project υλοποιεί μια προσομοίωση του ελληνικού εκλογικού συστήματος κατανομής βουλευτικών εδρών[cite: 8, 9]. Αναπτύχθηκε στα πλαίσια του μαθήματος **ΗΥ240: Δομές Δεδομένων** (Χειμερινό Εξάμηνο 2024-25) του Τμήματος Επιστήμης Υπολογιστών, στο Πανεπιστήμιο Κρήτης. Αποτελεί το 2ο μέρος της προγραμματιστικής εργασίας του μαθήματος.
-
----
-
-## 🏗️ Δομές Δεδομένων
-
-Για την επίτευξη βέλτιστης πολυπλοκότητας, το σύστημα χρησιμοποιεί τις εξής προχωρημένες δομές δεδομένων:
-
-* [cite_start]**Εκλογικές Περιφέρειες (Districts):** Στατικός πίνακας χωρητικότητας 56 θέσεων[cite: 16]. [cite_start]Κάθε εγγραφή κρατάει πληροφορίες για τις έδρες, τα λευκά, τα άκυρα και έναν πίνακα ψήφων για κάθε κόμμα[cite: 19, 20, 21, 22].
-* [cite_start]**Εκλογικά Τμήματα (Stations):** Πίνακας κατακερματισμού (Hash Table) με χρήση καθολικού κατακερματισμού (universal hashing)[cite: 35, 48]. [cite_start]Η επίλυση συγκρούσεων γίνεται με τη μέθοδο των ταξινομημένων αλυσίδων[cite: 37].
-* [cite_start]**Ψηφοφόροι (Voters):** Αποθηκεύονται σε ένα πλήρες, μη-ταξινομημένο, διπλά-συνδεδεμένο δυαδικό δένδρο μέσα σε κάθε εκλογικό τμήμα[cite: 55].
-* [cite_start]**Κόμματα (Parties):** Στατικός πίνακας 5 θέσεων[cite: 99].
-* [cite_start]**Υποψήφιοι (Candidates):** Απλά συνδεδεμένο δένδρο δυαδικής αναζήτησης (Binary Search Tree), ταξινομημένο βάσει του αναγνωριστικού (`cid`), για κάθε κόμμα[cite: 123].
-* [cite_start]**Κοινοβούλιο (Parliament):** Μια απλά συνδεδεμένη λίστα βουλευτών, ταξινομημένη σε φθίνουσα διάταξη ως προς το αναγνωριστικό τους (`cid`)[cite: 147].
-* [cite_start]**Εκλογή Υποψηφίων (MinHeap):** Κατά την καταμέτρηση ψήφων, χρησιμοποιείται ένας δυναμικός Σωρός Ελαχίστων (MinHeap) για την εύρεση των υποψηφίων με τις περισσότερες ψήφους[cite: 284, 291].
+This project is a simulation of the Greek parliamentary election system. It was developed as the second phase of the **HY240: Data Structures** course assignment (Computer Science Department, University of Crete).
 
 ---
 
-## ⚙️ Λειτουργίες Προγράμματος (Events)
+##  Data Structures
 
-Το πρόγραμμα διαβάζει εντολές από ένα αρχείο εισόδου. Υποστηρίζονται οι παρακάτω λειτουργίες:
+To achieve optimal time complexity, the system implements the following advanced data structures:
 
-| Εντολή                | Περιγραφή                                                                                            | Χρονική Πολυπλοκότητα            |
-| :-------------------- | :--------------------------------------------------------------------------------------------------- | :------------------------------- |
-| `A`                   | Αναγγελία εκλογών. [cite_start]Αρχικοποιούνται οι δομές (Districts, Stations, Parties, Parliament) και οι καθολικές μεταβλητές. [cite: 178, 179, 180, 181, 182, 184] | -                                |
-| `D <did> <seats>`     | [cite_start]Δημιουργία εκλογικής περιφέρειας στο πρώτο κενό κελί του πίνακα. [cite: 189, 190, 191]   | [cite_start]O(log n) [cite: 191] |
-| `S <sid> <did>`       | [cite_start]Δημιουργία εκλογικού τμήματος στην κατάλληλη αλυσίδα του πίνακα κατακερματισμού. [cite: 201, 202] | -                                |
-| `R <vid> <sid>`       | [cite_start]Εγγραφή νέου ψηφοφόρου στο πλήρες δένδρο του εκλογικού τμήματος. [cite: 210, 211, 212]   | [cite_start]O(log n) [cite: 213] |
-| `C <cid> <pid> <did>` | [cite_start]Εγγραφή υποψηφίου στο BST του κόμματός του. [cite: 227, 228]                             | [cite_start]O(log n) [cite: 229] |
-| `V <vid> <sid> ...`   | [cite_start]Διαδικασία ψήφου (καταγραφή έγκυρων, λευκών ή άκυρων ψηφοδελτίων). [cite: 242, 243, 248, 249, 253] | -                                |
-| `M <did>`             | [cite_start]Καταμέτρηση ψήφων περιφέρειας, υπολογισμός εκλογικού μέτρου και εκλογή με χρήση MinHeap. [cite: 269, 271, 274, 281, 284] | -                                |
-| `N`                   | [cite_start]Σχηματισμός κοινοβουλίου (συνένωση των δένδρων υποψηφίων στην τελική λίστα). [cite: 319, 320, 321] | [cite_start]O(n) [cite: 323]     |
-| `I`, `J`, `K`, `L`    | [cite_start]Εκτύπωση στοιχείων (περιφερειών, τμημάτων, κομμάτων και κοινοβουλίου αντίστοιχα). [cite: 337, 353, 367, 377] | -                                |
-| `BU <vid> <sid>`      | (Bonus) [cite_start]Διαγραφή ψηφοφόρου με διατήρηση της δομής του πλήρους δένδρου. [cite: 395, 396, 397] | -                                |
-| `BF`                  | (Bonus) [cite_start]Απελευθέρωση όλης της δεσμευμένης μνήμης (αποφυγή memory leaks). [cite: 409, 410, 415] | -                                |
+* **Districts:** A static array of 56 cells. It stores seats, blanks, invalids, and an array of party votes.
+* **Stations:** A Hash Table utilizing universal hashing. Collisions are resolved using sorted linked lists (chaining).
+* **Voters:** A complete, unsorted, doubly-linked binary tree, maintained within each station.
+* **Parties:** A static array of 5 cells.
+* **Candidates:** A simply-linked Binary Search Tree (BST) for each party, sorted by candidate ID.
+* **Parliament:** A singly-linked list of elected members, sorted in descending order by candidate ID.
+* **Election Mechanism (MinHeap):** A dynamically allocated Minimum Heap is used during the vote-counting phase to efficiently find the candidates with the most votes.
 
 ---
 
-## 🚀 Οδηγίες Εκτέλεσης
+## ⚙️ Supported Events
 
-[cite_start]Για την μεταγλώττιση (compilation) του προγράμματος, χρησιμοποιήστε το παρεχόμενο `Makefile`[cite: 484, 487]:
+The program parses an input file containing specific commands. The operations are:
 
-```bash
-
-make
+| Command | Description | Time Complexity |
+| :--- | :--- | :--- |
+| `A` | **Announce Elections:** Initializes all primary data structures. | - |
+| `D <did> <seats>` | **Create District:** Inserts a new district into the first empty array slot. | O(log n) |
+| `S <sid> <did>` | **Create Station:** Inserts a station into the appropriate hash table chain. | - |
+| `R <vid> <sid>` | **Register Voter:** Inserts a voter into the complete binary tree. | O(log n) |
+| `C <cid> <pid> <did>`| **Register Candidate:** Inserts a candidate into the party's BST. | O(log n) |
+| `V <vid> <sid> ...`| **Vote:** Records a valid, blank, or invalid vote and updates counters. | - |
+| `M <did>` | **Count Votes:** Calculates the electoral quota and elects candidates using the MinHeap. | - |
+| `N` | **Form Parliament:** Merges the elected candidates into the final sorted list. | O(n) |
+| `I`, `J`, `K`, `L` | **Print:** Outputs the state of districts, stations, parties, and the parliament. | - |
+| `BU <vid> <sid>` | *(Bonus)* **Unregister Voter:** Deletes a voter while maintaining the complete tree structure. | - |
+| `BF` | *(Bonus)* **Free Memory:** Safely deallocates all dynamically allocated memory. | - |
