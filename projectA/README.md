@@ -1,4 +1,4 @@
-# Greek Election System Simulation - Phase 01
+# Election System Simulation - Phase 01
 
 This project implements a simulation of the Greek electoral system for the allocation of parliamentary seats. It was developed as part of the **HY240: Data Structures** course (Winter Semester 2024-25). It constitutes the 1st part of the programming assignment.
 
